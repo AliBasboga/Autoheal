@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>autoheal.js — Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e2e4ee;
+      --muted: #7a7e9a;
+      --accent: #5b8af5;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 40px 20px 120px;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 .badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 7px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      margin: 4px;
+    }
+    button:hover { opacity: 0.85; }
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .img-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-top: 8px; }
+    .img-row img { border-radius: 6px; display: block; }
+
+    pre {
+      background: #111318;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 50px 16px 16px;
+      font-size: 13px;
+      overflow-x: auto;
+      line-height: 1.6;
+      color: #c9d1d9;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace; }
+
+    .hint { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .tag { background: #252836; border: 1px solid var(--border); border-radius: 5px;
+           padding: 3px 10px; font-size: 12px; color: var(--muted); }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    .toast-demo-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>🩺 autoheal.js</h1>
+  <p class="subtitle">Plug-and-play UX auto-repair · no config · no dependencies</p>
+
+  <!-- ── A: Broken Images ── -->
+  <section>
+    <h2>A · Broken Image Handling <span class="badge">auto</span></h2>
+    <p style="margin-bottom:12px;color:var(--muted);font-size:13.5px;">
+      These images have intentionally bad URLs — autoheal replaces them with styled placeholders.
+    </p>
+    <div class="img-row">
+      <img src="https://does-not-exist.invalid/photo.jpg" width="140" height="90" alt="Landscape" />
+      <img src="https://broken-url.test/avatar.png"       width="80"  height="80" alt="Avatar" />
+      <img src="/no-such-image.webp"                      width="180" height="100" alt="Banner" />
+    </div>
+  </section>
+
+  <!-- ── B: Error Handling ── -->
+  <section>
+    <h2>B · Global Error Handling <span class="badge">manual trigger</span></h2>
+    <p style="margin-bottom:12px;color:var(--muted);font-size:13.5px;">
+      Trigger JS errors or promise rejections — autoheal catches them and shows a toast.
+    </p>
+    <div>
+      <button onclick="triggerError()">Throw JS Error</button>
+      <button onclick="triggerRejection()" class="secondary">Unhandled Promise Rejection</button>
+    </div>
+    <p class="hint">Check the browser console for detailed error info.</p>
+  </section>
+
+  <!-- ── C: Offline / Online ── -->
+  <section>
+    <h2>C · Offline / Online Detection <span class="badge">auto</span></h2>
+    <p style="margin-bottom:12px;color:var(--muted);font-size:13.5px;">
+      Use DevTools → Network tab → set "Offline" to see the banner, then restore.
+      Or use the buttons below to simulate (fires the browser events).
+    </p>
+    <div>
+      <button onclick="simulateOffline()">Simulate Offline</button>
+      <button onclick="simulateOnline()" class="secondary">Simulate Online</button>
+    </div>
+  </section>
+
+  <!-- ── D: Slow Load ── -->
+  <section>
+    <h2>D · Slow Load Detection <span class="badge">auto on load</span></h2>
+    <p style="color:var(--muted);font-size:13.5px;">
+      If page load takes &gt; 3 s, a sticky warning toast appears automatically.
+      To test: throttle your network in DevTools before loading this page.
+    </p>
+    <div class="tag-row" style="margin-top:10px;">
+      <span class="tag">window.onload timing</span>
+      <span class="tag">Navigation Timing API</span>
+      <span class="tag">Sticky toast until loaded</span>
+    </div>
+  </section>
+
+  <!-- ── E: Copy Buttons ── -->
+  <section>
+    <h2>E · Copy Button for Code Blocks <span class="badge">auto</span></h2>
+    <p style="margin-bottom:4px;color:var(--muted);font-size:13.5px;">
+      A "Copy" button is automatically injected into every &lt;pre&gt; element.
+    </p>
+    <pre><code>// JavaScript example
+function greet(name) {
+  return `Hello, ${name}! 👋`;
+}
+
+console.log(greet("World"));</code></pre>
+
+    <pre><code># Python example
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+print(list(fibonacci(8)))</code></pre>
+
+    <button onclick="addDynamicBlock()" style="margin-top:12px;">Add Dynamic &lt;pre&gt;</button>
+    <p class="hint">Dynamic code blocks injected after load also get the copy button (MutationObserver).</p>
+  </section>
+
+  <!-- ── F: Manual Notify ── -->
+  <section>
+    <h2>F · Toast Notification API <span class="badge">manual</span></h2>
+    <p style="margin-bottom:12px;color:var(--muted);font-size:13.5px;">
+      <code>AutoHeal.notify(message, type)</code> — call it from your own code.
+    </p>
+    <div class="toast-demo-row">
+      <button onclick="AutoHeal.notify('Action completed successfully!', 'success')">✓ Success</button>
+      <button onclick="AutoHeal.notify('Something went wrong.', 'error')">✕ Error</button>
+      <button onclick="AutoHeal.notify('Here is some information for you.', 'info')">ℹ Info</button>
+      <button onclick="AutoHeal.notify('Proceed with caution.', 'warning')">⚠ Warning</button>
+      <button onclick="AutoHeal.notify('Sticky toast — no auto-dismiss.', 'info', 0)" class="secondary">Sticky (0ms)</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── AUTOHEAL SCRIPT ── -->
+<script src="autoheal.js"></script>
+
+<script>
+  /* ── Test helpers ── */
+
+  function triggerError() {
+    // This runs in a timeout so it's a true uncaught error
+    setTimeout(function () {
+      null.explode(); // intentional TypeError
+    }, 0);
+  }
+
+  function triggerRejection() {
+    Promise.reject(new Error("Simulated unhandled rejection from demo page"));
+  }
+
+  function simulateOffline() {
+    window.dispatchEvent(new Event("offline"));
+  }
+  function simulateOnline() {
+    window.dispatchEvent(new Event("online"));
+  }
+
+  function addDynamicBlock() {
+    var section = document.querySelectorAll("section")[4]; // Code section
+    var pre = document.createElement("pre");
+    pre.innerHTML = '<code>// Dynamic block — added at ' + new Date().toLocaleTimeString() + '\nconst x = Math.random();\nconsole.log("Dynamic!", x);</code>';
+    section.appendChild(pre);
+  }
+</script>
+
+</body>
+</html>
