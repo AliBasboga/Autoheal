@@ -1,37 +1,26 @@
 # AutoHeal.js
 
-## Project Overview
-AutoHeal.js is a JavaScript library designed to automate the healing processes of various applications, ensuring high availability and reliability. It enables seamless recovery from failures without manual intervention, minimizing downtime and improving the overall user experience.
+AutoHeal.js is a JavaScript library designed to improve the user experience by handling various scenarios that can negatively impact it. This library includes features such as broken image handling, error handling, offline/online detection, slow load detection, and a convenient copy button for elements.  
 
-## Features
-- **Automated Healing:** Automatically detect and recover from failures in real-time.
-- **Configurable Settings:** Easily adjust the healing parameters to fit any application requirements.
-- **Extensive Logging:** Detailed logs help track healing operations and investigate failures.
-- **Compatibility:** Works with various platforms and environments, making it a versatile choice for developers.
-- **Easy Integration:** Simple API for easy integration into existing projects without significant overhead.
+## Features:
 
-## Usage Instructions
-1. **Installation:**
-   ```bash
-   npm install autoheal
-   ```
-   
-2. **Importing the Library:**
-   ```javascript
-   const AutoHeal = require('autoheal');
-   ```
-   
-3. **Using AutoHeal.js:**
-   ```javascript
-   const heal = new AutoHeal({ /* configuration options */ });
-   heal.start();
-   ```
+### 1. Broken Image Handling
+If an image fails to load, AutoHeal.js replaces it with a default image and logs the error. 
 
-## Best Practices
-- **Configuration:** Tailor the configurations to match your application's requirements for optimal performance.
-- **Monitoring:** Implement monitoring alongside AutoHeal to gain insights into system behaviors. 
-- **Testing:** Regularly test the healing processes to ensure they work as expected in various scenarios.
-- **Documentation:** Keep documentation updated to reflect any changes in usage or features.
+### 2. Error Handling
+AutoHeal.js provides a mechanism for catching and logging errors that occur during the execution of your scripts. By implementing a global error handler, it helps in maintaining a smoother user experience.
 
-## Conclusion
-AutoHeal.js stands as a robust solution for modern applications that prioritize high availability and quick recovery from failures. By automating healing processes, developers can focus on enhancing application functionality and user experience without the worry of unexpected downtimes.
+### 3. Offline/Online Detection
+Detects the user's online status. It can notify when the user goes offline or comes back online, allowing for adaptive content loading.
+
+### 4. Slow Load Detection
+Automatically detects resources that are taking longer than expected to load and can provide notifications or alternative actions to the user.
+
+### 5. Copy Button Feature
+Easily allow users to copy content to their clipboard with a simple button click. This feature enhances usability, especially for frequently shared information.
+
+## Usage:
+To include the script in your project, add the following line within your HTML:
+```html
+<script src="js/autoheal.js"></script>
+```
