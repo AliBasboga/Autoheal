@@ -22,5 +22,6 @@ Easily allow users to copy content to their clipboard with a simple button click
 ## Usage:
 To include the script in your project, add the following line within your HTML:
 ```html
+demo: https://alibasboga.github.io/Autoheal/
 <script src="js/autoheal.js"></script>
 ```
